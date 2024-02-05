@@ -1,0 +1,6 @@
+# Intellij CLion
+/.idea
+
+/.envrc
+/.direnv
+/result

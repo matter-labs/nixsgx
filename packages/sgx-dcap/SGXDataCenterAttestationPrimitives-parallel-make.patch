@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index 344d08e..edd287a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,7 @@ PCKRetrievalTool: QuoteGeneration
+ 	$(MAKE) -C tools/PCKRetrievalTool
+ 
+ SGXPlatformRegistration:
+-	$(MAKE) -C tools/SGXPlatformRegistration
++	$(MAKE) -j1 -C tools/SGXPlatformRegistration
+ 
+ WinPle:
+ 	$(MAKE) -C driver/win/PLE
+diff --git a/tools/PCKCertSelection/Makefile b/tools/PCKCertSelection/Makefile
+index c1115fe..fbdfa06 100644
+--- a/tools/PCKCertSelection/Makefile
++++ b/tools/PCKCertSelection/Makefile
+@@ -82,7 +82,7 @@ $(PROJECTS): $(BIN_DIR)
+ $(BIN_DIR):
+ 	$(PCKCERTSEL_VERBOSE)mkdir -p $@
+ 
+-$(ZIPFILE):
++$(ZIPFILE): $(PROJECTS)
+ 	bash pack.sh
+ 	$(PCKCERTSEL_VERBOSE)echo "$@ : done"
+ 	$(PCKCERTSEL_VERBOSE)echo
