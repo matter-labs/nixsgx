@@ -1,0 +1,191 @@
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-ae-id-enclave/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-ae-id-enclave/createTarball.sh
+index 1ee6355..249e37e 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-ae-id-enclave/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-ae-id-enclave/createTarball.sh
+@@ -58,6 +58,6 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/IDE_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-ae-qe3/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-ae-qe3/createTarball.sh
+index 2ac7592..e525128 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-ae-qe3/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-ae-qe3/createTarball.sh
+@@ -58,5 +58,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/QE3_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-ae-qve/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-ae-qve/createTarball.sh
+index 294706f..b86e17c 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-ae-qve/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-ae-qve/createTarball.sh
+@@ -58,5 +58,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/QVE_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-ae-tdqe/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-ae-tdqe/createTarball.sh
+index 9f5e4df..48ee554 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-ae-tdqe/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-ae-tdqe/createTarball.sh
+@@ -58,5 +58,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/TDQE_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-dcap-default-qpl/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-dcap-default-qpl/createTarball.sh
+index ad7de91..80940ee 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-dcap-default-qpl/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-dcap-default-qpl/createTarball.sh
+@@ -59,6 +59,6 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/DEFAULT_QPL_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-dcap-ql/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-dcap-ql/createTarball.sh
+index f60411f..0c5cba6 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-dcap-ql/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-dcap-ql/createTarball.sh
+@@ -61,5 +61,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/QUOTE_LOADER_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-dcap-quote-verify/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-dcap-quote-verify/createTarball.sh
+index 1e67891..af616d8 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-dcap-quote-verify/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-dcap-quote-verify/createTarball.sh
+@@ -62,5 +62,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/QUOTE_VERIFIER_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-pce-logic/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-pce-logic/createTarball.sh
+index ebb1239..1073bd9 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-pce-logic/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-pce-logic/createTarball.sh
+@@ -58,5 +58,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/PCE_WRAPPER_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-qe3-logic/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-qe3-logic/createTarball.sh
+index c6271d3..417cb70 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-qe3-logic/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-qe3-logic/createTarball.sh
+@@ -56,5 +56,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+
+ # Create the tarball
+ pushd ${INSTALL_PATH} &> /dev/null
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libsgx-tdx-logic/createTarball.sh b/QuoteGeneration/installer/linux/common/libsgx-tdx-logic/createTarball.sh
+index 80dff97..04738c3 100755
+--- a/QuoteGeneration/installer/linux/common/libsgx-tdx-logic/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libsgx-tdx-logic/createTarball.sh
+@@ -59,5 +59,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/TDQE_WRAPPER_VERSION/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/libtdx-attest/createTarball.sh b/QuoteGeneration/installer/linux/common/libtdx-attest/createTarball.sh
+index 4e53085..7047a49 100755
+--- a/QuoteGeneration/installer/linux/common/libtdx-attest/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/libtdx-attest/createTarball.sh
+@@ -61,5 +61,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+ SGX_VERSION=$(awk '/STRFILEVER/ {print $3}' ${ROOT_DIR}/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${SGX_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh b/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
+index fa3286e..cacf5a3 100755
+--- a/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
+@@ -57,5 +57,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+
+ # Create the tarball
+ pushd ${INSTALL_PATH} &> /dev/null
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh b/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh
+index 6797401..0f59abf 100755
+--- a/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh
++++ b/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh
+@@ -55,5 +55,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=BOMs/tdx-qgs-package.txt --cleanup=fals
+
+ # Create the tarball
+ pushd ${INSTALL_PATH} &> /dev/null
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool/createTarball.sh b/tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool/createTarball.sh
+index f09f0d8..60a3796 100755
+--- a/tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool/createTarball.sh
++++ b/tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool/createTarball.sh
+@@ -56,5 +56,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=BOMs/pck-id-retrieval-tool-package.txt
+
+ # Create the tarball
+ pushd ${INSTALL_PATH} &> /dev/null
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+diff --git a/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-network/createTarball.sh b/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-network/createTarball.sh
+index f0109c5..64a8523 100755
+--- a/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-network/createTarball.sh
++++ b/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-network/createTarball.sh
+@@ -59,6 +59,6 @@ python ${SCRIPT_DIR}/gen_source.py --bom=BOMs/../../licenses/BOM_license.txt --c
+ RA_VERSION=$(awk '/STRFILEVER/ {print $3}' ${ROOT_DIR}/../../QuoteGeneration/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${RA_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+
+diff --git a/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-uefi/createTarball.sh b/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-uefi/createTarball.sh
+index d62f397..73854a1 100755
+--- a/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-uefi/createTarball.sh
++++ b/tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-uefi/createTarball.sh
+@@ -59,6 +59,6 @@ python ${SCRIPT_DIR}/gen_source.py --bom=BOMs/../../licenses/BOM_license.txt --c
+ RA_VERSION=$(awk '/STRFILEVER/ {print $3}' ${ROOT_DIR}/../../QuoteGeneration/common/inc/internal/se_version.h|sed 's/^\"\(.*\)\"$/\1/')
+ pushd ${INSTALL_PATH} &> /dev/null
+ sed -i "s/USR_LIB_VER=.*/USR_LIB_VER=${RA_VERSION}/" Makefile
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null
+
+diff --git a/tools/SGXPlatformRegistration/package/installer/common/sgx-ra-service/createTarball.sh b/tools/SGXPlatformRegistration/package/installer/common/sgx-ra-service/createTarball.sh
+index de7e205..a18b930 100755
+--- a/tools/SGXPlatformRegistration/package/installer/common/sgx-ra-service/createTarball.sh
++++ b/tools/SGXPlatformRegistration/package/installer/common/sgx-ra-service/createTarball.sh
+@@ -57,5 +57,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
+
+ # Create the tarball
+ pushd ${INSTALL_PATH} &> /dev/null
+-tar -zcvf ${TARBALL_NAME} *
++tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
+ popd &> /dev/null

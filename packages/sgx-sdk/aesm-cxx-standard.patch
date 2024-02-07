@@ -1,0 +1,13 @@
+diff --git a/psw/ae/aesm_service/source/CMakeLists.txt b/psw/ae/aesm_service/source/CMakeLists.txt
+index ffc1bee7..5c61e9f1 100644
+--- a/psw/ae/aesm_service/source/CMakeLists.txt
++++ b/psw/ae/aesm_service/source/CMakeLists.txt
+@@ -64,7 +64,7 @@ if(SGX_DISABLE_PSE)
+ endif()
+ 
+ set(CMAKE_CXX_STANDARD_REQUIRED 1)
+-set(CMAKE_CXX_STANDARD 11)
++set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_SKIP_BUILD_RPATH true)
+ 
+ ########## SGX SDK Settings ##########
