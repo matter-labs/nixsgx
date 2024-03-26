@@ -21,12 +21,6 @@
         namespace = "nixsgx";
       };
 
-      alias = {
-        packages = {
-          default = "all";
-        };
-      };
-
       outputs-builder = channels: {
         formatter = channels.nixpkgs.nixpkgs-fmt;
       };

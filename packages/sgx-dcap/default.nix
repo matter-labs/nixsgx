@@ -63,8 +63,12 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # make tarballs reproducible
     ./SGXDataCenterAttestationPrimitives-tarball-repro.patch
+    # sigh... Intel!
     ./SGXDataCenterAttestationPrimitives-parallel-make.patch
+    # make config work without a dedicated PCCS server by default
+    ./SGXDataCenterAttestationPrimitives-sgx_default_qcnl_conf.patch
   ];
 
   postPatch = ''
@@ -153,7 +157,7 @@ stdenv.mkDerivation rec {
         #    sgx-ra-service
         #    tdx-qgs
     )
-    
+
     for ((i = 0 ; i < ''${#dcap_map[@]} ; i+=2 )); do
         src="''${dcap_map[i]}"
         dst="''${dcap_map[i+1]}"
@@ -162,19 +166,19 @@ stdenv.mkDerivation rec {
 
         mkdir -p "$dst"
 
-        if [[ -d "$out/$src/opt/intel" ]]; then 
-          find "$out/$src/opt/intel" 
+        if [[ -d "$out/$src/opt/intel" ]]; then
+          find "$out/$src/opt/intel"
           moveToOutput "$src/opt/intel" "$dst"
           mkdir "$dst/bin"
           mv "$dst/$src/opt/intel"/*/* "$dst/bin/"
         fi
- 
-        if [[ -d "$out/$src" ]]; then 
+
+        if [[ -d "$out/$src" ]]; then
           find "$out/$src"
           moveToOutput "$src" "$dst"
         fi
 
-        if [[ -d "$out/$src-dev" ]]; then 
+        if [[ -d "$out/$src-dev" ]]; then
           find "$out/$src-dev"
           moveToOutput "$src-dev" "$dst"
         fi
