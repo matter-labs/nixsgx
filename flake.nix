@@ -1,4 +1,11 @@
 {
+  nixConfig.extra-substituters = [
+    "https://nixsgx.cachix.org"
+  ];
+  nixConfig.extra-trusted-public-keys = [
+    "nixsgx.cachix.org-1:tGi36DlY2joNsIXOlGnSgWW0+E094V6hW0umQRo/KoE="
+  ];
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
 
