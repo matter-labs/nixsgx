@@ -26,15 +26,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.23.100.2";
+  version = "2.24.100.3";
   # Version as used in the Git tag
-  versionTag = "2.23";
+  versionTag = "2.24";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-i+fE6xKiuljG8LY8TIHgrW15DVpdp46bZdNo/BjgT/I=";
+    hash = "sha256-1urEdfMKNUqqyJ3wQ10+tvtlRuAKELpaCWIOzjCbYKw=";
     fetchSubmodules = true;
   };
 
@@ -45,14 +45,22 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # no timestamp in mini zip archives
-    ./CppMicroServices-no-mtime.patch
-    # Set the CXX standard for nix builds of sgx-psw
-    ./aesm-cxx-standard.patch
     # There's a `make preparation` step that downloads some prebuilt binaries
     # and applies some patches to the in-repo git submodules. This patch removes
     # the parts that download things, since we can't do that inside the sandbox.
     ./disable-downloads.patch
+
+    # Set the CXX standard for nix builds of sgx-psw
+    ./aesm-cxx-standard.patch
+
+    # This patch disable mtime in bundled zip file for reproducible builds.
+    #
+    # Context: The `aesm_service` binary depends on a vendored library called
+    # `CppMicroServices`. At build time, this lib creates and then bundles
+    # service resources into a zip file and then embeds this zip into the
+    # binary. Without changes, the `aesm_service` will be different after every
+    # build because the embedded zip file contents have different modified times.
+    ./cppmicroservices-no-mtime.patch
   ];
 
   postPatch = ''
@@ -116,8 +124,6 @@ stdenv.mkDerivation rec {
 
       pushd 'external/ippcp_internal'
 
-      cp -r ${ipp-crypto-no_mitigation}/include/. inc/
-
       install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
         lib/linux/intel64/no_mitigation/libippcp.a
       install -D -m a+rw ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a \
@@ -125,8 +131,13 @@ stdenv.mkDerivation rec {
       install -D -m a+rw ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a \
         lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
+      cp -r ${ipp-crypto-no_mitigation}/include/* inc/
+
+      mkdir inc/ippcp
+      cp ${ipp-crypto-no_mitigation}/include/fips_cert.h inc/ippcp/
+
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u7.patch -o inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp21u11.patch -o ./inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
@@ -280,11 +291,11 @@ stdenv.mkDerivation rec {
       '';
     };
 
-  meta = with lib; {
+  meta = {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ phlip9 sbellem arturcygan veehaitch ];
+    maintainers = with lib.maintainers; [ phlip9 sbellem arturcygan veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = with licenses; [ bsd3 ];
+    license = [ lib.licenses.bsd3 ];
   };
 }

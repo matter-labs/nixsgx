@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sgx-dcap";
-  version = "1.20";
+  version = "1.21";
 
   postUnpack =
     let
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-nPsI89KSBA3cSNTMWyktZP5dkf+BwL3NZ4MuUf6G98o=";
+          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
         };
       };
     in
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "SGXDataCenterAttestationPrimitives";
     rev = "DCAP_${version}";
-    hash = "sha256-gNQzV6wpoQUZ3x/RqvFLwak4HhDOiJC5mW0okGx3UGA=";
+    hash = "sha256-Vp8R4W6qdPTGJFNJrPPKe9Oqxxj+UIdZf2GSL+gCyjU=";
     fetchSubmodules = true;
   };
 

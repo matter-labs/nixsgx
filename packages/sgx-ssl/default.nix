@@ -1,16 +1,17 @@
 { stdenv
+, callPackage
 , fetchFromGitHub
 , fetchurl
 , lib
-, openssl
 , perl
 , nixsgx
 , which
 , debug ? false
 }:
 let
-  sgxVersion = nixsgx.sgx-sdk.versionTag;
-  opensslVersion = "3.0.12";
+  inherit (nixsgx) sgx-sdk;
+  sgxVersion = sgx-sdk.versionTag;
+  opensslVersion = "3.0.13";
 in
 stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     let
       opensslSourceArchive = fetchurl {
         url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-        hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+        hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
       };
     in
     ''
@@ -37,16 +38,15 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs Linux/build_openssl.sh
 
-    # Run the test in the `installCheckPhase`, not the `buildPhase`
+    # Skip the tests. Build and run separately (see below).
     substituteInPlace Linux/sgx/Makefile \
       --replace '$(MAKE) -C $(TEST_DIR) all' \
-                'bash -c "true"'
+                     'bash -c "true"'
   '';
 
   nativeBuildInputs = [
     perl
-    nixsgx.sgx-sdk
-    stdenv.cc.libc
+    sgx-sdk
     which
   ];
 
@@ -60,22 +60,23 @@ stdenv.mkDerivation {
     "DESTDIR=$(out)"
   ];
 
-  # Build the test app
-  doInstallCheck = false;
-  installCheckTarget = "test";
-  installCheckFlags = [
-    "SGX_MODE=SIM"
-    "-j 1" # Makefile doesn't support multiple jobs
-  ];
-  nativeInstallCheckInputs = [
-    openssl
-  ];
+  # These tests build on any x86_64-linux but BOTH SIM and HW will only _run_ on
+  # real Intel hardware. Split these out so OfBorg doesn't choke on this pkg.
+  #
+  # ```
+  # nix run .#sgx-ssl.tests.HW
+  # nix run .#sgx-ssl.tests.SIM
+  # ```
+  passthru.tests = {
+    HW = callPackage ./tests.nix { sgxMode = "HW"; inherit opensslVersion; };
+    SIM = callPackage ./tests.nix { sgxMode = "SIM"; inherit opensslVersion; };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library for Intel SGX enclave applications based on OpenSSL";
     homepage = "https://github.com/intel/intel-sgx-ssl";
-    maintainers = with maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = [ licenses.bsd3 licenses.openssl ];
+    license = with lib.licenses; [ bsd3 openssl ];
   };
 }

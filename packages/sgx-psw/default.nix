@@ -13,8 +13,11 @@
 , which
 , debug ? false
 }:
+let
+  inherit (nixsgx) sgx-sdk;
+in
 stdenv.mkDerivation rec {
-  inherit (nixsgx.sgx-sdk) version versionTag src patches;
+  inherit (sgx-sdk) patches src version versionTag;
   pname = "sgx-psw";
 
   postUnpack =
@@ -29,15 +32,15 @@ stdenv.mkDerivation rec {
       # Also include the Data Center Attestation Primitives (DCAP) platform
       # enclaves.
       dcap = rec {
-        version = "1.20";
+        version = "1.21";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-nPsI89KSBA3cSNTMWyktZP5dkf+BwL3NZ4MuUf6G98o=";
+          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
         };
       };
     in
-    nixsgx.sgx-sdk.postUnpack + ''
+    sgx-sdk.postUnpack + ''
       # Make sure we use the correct version of prebuilt DCAP
       grep -q 'ae_file_name=${dcap.filename}' "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
     file
     makeWrapper
     python3
-    nixsgx.sgx-sdk
+    sgx-sdk
     which
   ];
 
@@ -159,30 +162,30 @@ stdenv.mkDerivation rec {
     echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
       --replace '@aesm_folder@' \
-                "$out/aesm" \
+                     "$out/aesm" \
       --replace 'Type=forking' \
-                'Type=simple' \
+                     'Type=simple' \
       --replace "ExecStart=$out/aesm/aesm_service" \
-                "ExecStart=$out/bin/aesm_service --no-daemon"\
+                     "ExecStart=$out/bin/aesm_service --no-daemon"\
       --replace "/bin/mkdir" \
-                "${coreutils}/bin/mkdir" \
+                     "${coreutils}/bin/mkdir" \
       --replace "/bin/chown" \
-                "${coreutils}/bin/chown" \
+                     "${coreutils}/bin/chown" \
       --replace "/bin/chmod" \
-                "${coreutils}/bin/chmod" \
+                     "${coreutils}/bin/chmod" \
       --replace "/bin/kill" \
-                "${coreutils}/bin/kill"
+                     "${coreutils}/bin/kill"
   '';
 
   passthru.tests = {
     service = nixosTests.aesmd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ phlip9 veehaitch citadelcore ];
+    maintainers = with lib.maintainers; [ phlip9 veehaitch citadelcore ];
     platforms = [ "x86_64-linux" ];
-    license = with licenses; [ bsd3 ];
+    license = [ lib.licenses.bsd3 ];
   };
 }
