@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , lib
 , curl
 , nlohmann_json
@@ -15,7 +16,7 @@ let
     find "$out" -mindepth 1 -delete
     cp ${lib.concatStringsSep " " list} "$out/"
   '';
-  headers = linkFarmFromDrvs "azure-dcpa-client-intel-headers" [
+  headers = linkFarmFromDrvs "azure-dcap-client-intel-headers" [
     (fetchFromGitHub rec {
       name = "${repo}-headers";
       owner = "intel";
@@ -44,8 +45,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./missing-includes.patch
     ./Azure-DCAP-Client.patch
+    # Fix gcc-13 build:
+    #   https://github.com/microsoft/Azure-DCAP-Client/pull/197
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/microsoft/Azure-DCAP-Client/commit/fbcae7b3c8f1155998248cf5b5f4c1df979483f5.patch";
+      hash = "sha256-ezEuQql3stn58N1ZPKMlhPpUOBkDpCcENpGwFAmWtHc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -78,11 +85,11 @@ stdenv.mkDerivation rec {
   # $(nix-build -A sgx-azure-dcap-client.tests.suite)/bin/tests
   passthru.tests.suite = callPackage ./test-suite.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
     homepage = "https://github.com/microsoft/azure-dcap-client";
-    maintainers = with maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = [ licenses.mit ];
+    license = [ lib.licenses.mit ];
   };
 }
