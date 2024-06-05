@@ -161,19 +161,19 @@ stdenv.mkDerivation rec {
     # is helpful to have properly patched versions for non-NixOS distributions.
     echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
-      --replace '@aesm_folder@' \
+      --replace-fail '@aesm_folder@' \
                      "$out/aesm" \
-      --replace 'Type=forking' \
+      --replace-fail 'Type=forking' \
                      'Type=simple' \
-      --replace "ExecStart=$out/aesm/aesm_service" \
+      --replace-fail "ExecStart=$out/aesm/aesm_service" \
                      "ExecStart=$out/bin/aesm_service --no-daemon"\
-      --replace "/bin/mkdir" \
+      --replace-fail "/bin/mkdir" \
                      "${coreutils}/bin/mkdir" \
-      --replace "/bin/chown" \
+      --replace-fail "/bin/chown" \
                      "${coreutils}/bin/chown" \
-      --replace "/bin/chmod" \
+      --replace-fail "/bin/chmod" \
                      "${coreutils}/bin/chmod" \
-      --replace "/bin/kill" \
+      --replace-fail "/bin/kill" \
                      "${coreutils}/bin/kill"
   '';
 

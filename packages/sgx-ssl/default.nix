@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
     # Skip the tests. Build and run separately (see below).
     substituteInPlace Linux/sgx/Makefile \
-      --replace '$(MAKE) -C $(TEST_DIR) all' \
+      --replace-fail '$(MAKE) -C $(TEST_DIR) all' \
                      'bash -c "true"'
   '';
 
