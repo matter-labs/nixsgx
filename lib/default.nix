@@ -27,6 +27,22 @@ _:
     }:
       assert lib.assertMsg (!(isAzure && sgx_default_qcnl_conf != null)) "sgx_default_qcnl_conf can't be set for Azure";
       let
+        manifestRecursiveMerge =
+          base: mod: with lib.attrsets; let
+            mergeByPathWithOp = path: action: setAttrByPath path (
+              if hasAttrByPath path mod
+              then action (getAttrFromPath path base) (getAttrFromPath path mod)
+              else getAttrFromPath path base
+            );
+            mergeListByPath = path: mergeByPathWithOp path (a: b: a ++ b);
+            mergeEnvPathByPath = path: mergeByPathWithOp path (a: b: a + ":" + b);
+          in
+          recursiveUpdate base (recursiveUpdate mod (
+            # manually merge the relevant lists / strings
+            mergeListByPath [ "fs" "mounts" ]
+            // mergeListByPath [ "sgx" "trusted_files" ]
+            // mergeEnvPathByPath [ "loader" "env" "LD_LIBRARY_PATH" ]
+          ));
         manifest_base = {
           libos = { inherit entrypoint; };
           fs = {
@@ -77,7 +93,7 @@ _:
           };
         };
 
-        mergedManifest = (if customRecursiveMerge == null then lib.recursiveUpdate else customRecursiveMerge) manifest_base manifest;
+        mergedManifest = (if customRecursiveMerge == null then manifestRecursiveMerge else customRecursiveMerge) manifest_base manifest;
 
         tomlFormat = pkgs.formats.toml { };
         manifestFile = tomlFormat.generate "${name}.manifest.toml" mergedManifest;
