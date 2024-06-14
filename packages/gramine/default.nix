@@ -29,20 +29,20 @@ let
     hash = "sha256-dgaHZlq0Glz/nECxBTwZVyvNqt7xGU5cuhteb4JGhuc=";
   };
   curl-wrap = fetchurl {
-    url = "https://curl.se/download/curl-8.4.0.tar.gz";
-    hash = "sha256-gW5BgJwEP/KF6MDwanWh+iUCEbv7LcCgN+7vOfGp5Cc=";
+    url = "https://curl.se/download/curl-8.7.1.tar.gz";
+    hash = "sha256-+RJJyH9o6gDPJ8RP36WnhCPkHnG31AjlkBqYltkFxJU=";
   };
   mbedtls-wrap = fetchurl {
-    url = "https://github.com/ARMmbed/mbedtls/archive/mbedtls-3.5.0.tar.gz";
-    hash = "sha256-AjEfyL0DLYn/mu5TXd21VFgQjcDUxSgGOPxhGup8Xko=";
+    url = "https://github.com/ARMmbed/mbedtls/archive/mbedtls-3.5.2.tar.gz";
+    hash = "sha256-7t7MRos/jQUu8FqdQr9j8EyKHFDRxalMJRxoE2WixyM=";
   };
   uthash-wrap = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v2.1.0.tar.gz";
     hash = "sha256-FSzNjmTQ9JU3cjLjlk0Gx+yLuMP70yF/ilcCYU+aZp4=";
   };
   glibc-wrap = fetchurl {
-    url = "https://ftp.gnu.org/gnu/glibc/glibc-2.38.tar.gz";
-    hash = "sha256-FuUeBFXiiPAzgLQ25B1ZJ8YJRavYbQyYUrhL5X3W7V4=";
+    url = "https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.gz";
+    hash = "sha256-l/hPO3WIzVQJOm9jibDBqB5w2ZcI10ljouPqt8fclC0=";
   };
 
   python = pkgs.python3;
@@ -54,17 +54,18 @@ let
     tomli
     tomli-w
     cryptography
+    voluptuous
   ];
 in
 python.pkgs.buildPythonPackage {
   pname = "gramine";
-  version = "1.6";
+  version = "1.7";
 
   src = pkgs.fetchFromGitHub {
     owner = "gramineproject";
     repo = "gramine";
-    rev = "v1.6";
-    hash = "sha256-LX7/XqxS8z0PomBDqe53sTTYgaXVmP23GSTJMpXRorM=";
+    rev = "v1.7";
+    hash = "sha256-QHgRGIx4jnTh0O3ihJbnuPwTdygJ03zpL2bdqAN9+sA=";
     fetchSubmodules = true;
   };
 
@@ -80,16 +81,16 @@ python.pkgs.buildPythonPackage {
     tar -zxf ${cjson-wrap}
     cp -av packagefiles/cJSON/. cJSON-1.7.12
     tar -zxf ${curl-wrap}
-    cp -av packagefiles/curl-8.4.0/. curl-8.4.0
-    mkdir mbedtls-mbedtls-3.5.0
-    tar -zxf ${mbedtls-wrap} -C mbedtls-mbedtls-3.5.0
-    cp -av packagefiles/mbedtls/. mbedtls-mbedtls-3.5.0
+    cp -av packagefiles/curl-8.7.1/. curl-8.7.1
+    mkdir mbedtls-mbedtls-3.5.2
+    tar -zxf ${mbedtls-wrap} -C mbedtls-mbedtls-3.5.2
+    cp -av packagefiles/mbedtls/. mbedtls-mbedtls-3.5.2
     tar -zxf ${uthash-wrap}
     cp -av packagefiles/uthash/. uthash-2.1.0
-    mkdir glibc-2.38-1
-    tar -zxf ${glibc-wrap} -C glibc-2.38-1
-    cp -av packagefiles/glibc-2.38/. glibc-2.38-1
-    sed -i -e 's#set -e#set -ex#g' glibc-2.38-1/compile.sh
+    mkdir glibc-2.39-1
+    tar -zxf ${glibc-wrap} -C glibc-2.39-1
+    cp -av packagefiles/glibc-2.39/. glibc-2.39-1
+    sed -i -e 's#set -e#set -ex#g' glibc-2.39-1/compile.sh
   )'';
 
   postPatch = ''
