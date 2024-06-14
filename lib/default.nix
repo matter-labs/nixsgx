@@ -166,7 +166,17 @@ _:
             "LD_LIBRARY_PATH=${lib.makeLibraryPath [ pkgs.curl.out (if isAzure then nixsgx.azure-dcap-client.out else nixsgx.sgx-dcap.default_qpl)]}"
           ];
           Entrypoint = [ "/bin/sh" "-c" ];
-          Cmd = [ "${extraCmd}; [[ -r /var/run/aesmd/aesm.socket ]] || restart-aesmd >&2; exec gramine-sgx ${name}" ];
+          Cmd = [
+            ''
+              ${extraCmd};
+              if [ -n \"$GRAMINE_DIRECT\" ]; then
+                  exec gramine-direct ${name};
+              else
+                  [[ -r /var/run/aesmd/aesm.socket ]] || restart-aesmd >&2;
+                  exec gramine-sgx ${name};
+              fi
+            ''
+          ];
           WorkingDir = "${appDir}";
         };
 

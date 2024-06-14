@@ -63,3 +63,9 @@ jobs:
 
       - name: nix build
         run: nix run github:nixos/nixpkgs/nixos-23.11#nixci
+
+      - name: integration check
+        run: |
+          nix build --accept-flake-config -L .#nixsgx-test-sgx-azure
+          docker load -i result
+          docker run -i --env GRAMINE_DIRECT=1 --privileged --init --rm nixsgx-test-sgx-azure:latest | grep -q -F 'Hello, world!'
