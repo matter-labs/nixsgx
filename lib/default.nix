@@ -169,7 +169,7 @@ _:
           Cmd = [
             ''
               ${extraCmd};
-              if [ -n \"$GRAMINE_DIRECT\" ]; then
+              if [ -n "$GRAMINE_DIRECT" ]; then
                   exec gramine-direct ${name};
               else
                   [[ -r /var/run/aesmd/aesm.socket ]] || restart-aesmd >&2;
