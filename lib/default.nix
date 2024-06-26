@@ -21,6 +21,7 @@ _:
     , extraPostBuild ? ""
     , extraChrootCommands ? ""
     , appDir ? "/app"
+    , appName ? "app"
     , sigFile ? null
     , extendedPackages ? [ ]
     , customRecursiveMerge ? null
@@ -121,7 +122,7 @@ _:
               set -e
               mkdir -p $out/{etc,var/run}
               mkdir -p $out/${appDir}/{.dcap-qcnl,.az-dcap-client}
-              ln -s ${manifestFile} $out/${appDir}/${name}.manifest.toml
+              ln -s ${manifestFile} $out/${appDir}/${appName}.manifest.toml
               # Increase IPv4 address priority
               printf "precedence ::ffff:0:0/96  100\n" > $out/etc/gai.conf
               ${
@@ -170,10 +171,10 @@ _:
             ''
               ${extraCmd};
               if [ -n "$GRAMINE_DIRECT" ]; then
-                  exec gramine-direct ${name};
+                  exec gramine-direct ${appName};
               else
                   [[ -r /var/run/aesmd/aesm.socket ]] || restart-aesmd >&2;
-                  exec gramine-sgx ${name};
+                  exec gramine-sgx ${appName};
               fi
             ''
           ];
@@ -200,10 +201,10 @@ _:
                 (
                   set -e
                   cd ${appDir}
-                  HOME=${appDir} ${nixsgx.gramine}/bin/gramine-manifest ${manifestFile} ${name}.manifest;
+                  HOME=${appDir} ${nixsgx.gramine}/bin/gramine-manifest ${manifestFile} ${appName}.manifest;
                   ${nixsgx.gramine}/bin/gramine-sgx-sign \
-                    --manifest ${name}.manifest \
-                    --output ${name}.manifest.sgx \
+                    --manifest ${appName}.manifest \
+                    --output ${appName}.manifest.sgx \
                     --key ${keyfile};
                   eval "${extraChrootCommands}"
                 )
@@ -221,8 +222,8 @@ _:
 
                 includeStorePaths = false;
                 extraCommands = ''
-                  mkdir -p app
-                  cp ${sigFile} app/nixsgx-test-sgx-azure.sig
+                  mkdir -p ${appDir}
+                  cp ${sigFile} ${appDir}/${appName}.sig
                 '';
               }
           else fromImage;
