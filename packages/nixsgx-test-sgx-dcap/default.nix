@@ -1,15 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2024 Matter Labs
 { lib
-, pkgs
-, inputs
-, nixsgx
+, nixsgxLib
 , hello
 , isAzure ? false
 , container-name ? "nixsgx-test-sgx-dcap"
 , tag ? "latest"
 }:
-pkgs.callPackage lib.nixsgx.mkSGXContainer {
+nixsgxLib.mkSGXContainer {
   name = container-name;
   inherit tag isAzure;
 
