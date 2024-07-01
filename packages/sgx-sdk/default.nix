@@ -18,6 +18,7 @@
 , python3
 , texinfo
 , validatePkgConfig
+, which
 , writeShellApplication
 , writeShellScript
 , writeText
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
     python3
     texinfo
     validatePkgConfig
+    which
   ];
 
   buildInputs = [
