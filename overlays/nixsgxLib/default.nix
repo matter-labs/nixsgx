@@ -211,7 +211,6 @@ final: _:
                   inherit fromImage;
 
                   includeStorePaths = false;
-                  enableFakechroot = true;
                   extraCommands = (mkNixStore contents) + ''
                     (
                       set -e
