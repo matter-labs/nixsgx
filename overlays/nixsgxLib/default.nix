@@ -8,11 +8,13 @@ final: _:
       (
         { lib
         , pkgs
+        , writeClosure
         , coreutils
         , curl
         , nixsgx
         , openssl
         , packages
+        , rsync
         , entrypoint
         , name
         , tag ? null
@@ -191,6 +193,16 @@ final: _:
             appImage = pkgs.dockerTools.buildLayeredImage { name = "${name}-app"; inherit contents; };
 
             addGramineManifest = fromImage:
+              let
+                mkNixStore = contents:
+                  let
+                    contentsList = if builtins.isList contents then contents else [ contents ];
+                  in
+                  ''
+                    ${rsync}/bin/rsync -ar --files-from=${writeClosure contentsList} / ./
+                  '';
+
+              in
               pkgs.dockerTools.buildLayeredImage
                 {
                   name = "${name}-manifest-${appName}";
@@ -200,16 +212,22 @@ final: _:
 
                   includeStorePaths = false;
                   enableFakechroot = true;
-                  fakeRootCommands = ''
+                  extraCommands = (mkNixStore contents) + ''
                     (
                       set -e
-                      cd ${appDir}
-                      HOME=${appDir} ${nixsgx.gramine}/bin/gramine-manifest ${manifestFile} ${appName}.manifest;
+                      CHROOT=$(pwd)
+                      appDir="${appDir}"
+                      cd "''${appDir#/}"
+                      HOME="''${appDir#/}" ${nixsgx.gramine}/bin/gramine-manifest ${manifestFile} ${appName}.manifest;
                       ${nixsgx.gramine}/bin/gramine-sgx-sign \
+                        --chroot "$CHROOT" \
                         --manifest ${appName}.manifest \
                         --output ${appName}.manifest.sgx \
                         --key ${keyfile};
                       eval "${extraChrootCommands}"
+                      cd "$CHROOT"
+                      chmod u+wx -R nix
+                      rm -fr nix
                     )
                   '';
                 };
