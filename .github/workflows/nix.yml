@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   fmt:
-    runs-on: [ matterlabs-ci-runner ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - uses: cachix/install-nix-action@v27
@@ -34,7 +34,7 @@ jobs:
       - run: nix fmt . -- --check
 
   check:
-    runs-on: [ matterlabs-ci-runner ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - uses: cachix/install-nix-action@v27
@@ -57,7 +57,7 @@ jobs:
 
   build:
     needs: check
-    runs-on: [ matterlabs-ci-runner ]
+    runs-on: [ matterlabs-default-infra-runners ]
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - uses: cachix/install-nix-action@v27
