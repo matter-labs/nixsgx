@@ -1,18 +1,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2024 Matter Labs
-{ lib
-, nixsgxLib
+{ pkgs
 , hello
 , isAzure ? false
 , container-name ? "nixsgx-test-sgx-dcap"
 , tag ? "latest"
 }:
-nixsgxLib.mkSGXContainer {
+pkgs.lib.tee.sgxGramineContainer {
   name = container-name;
   inherit tag isAzure;
 
   packages = [ hello ];
-  entrypoint = lib.meta.getExe hello;
+  entrypoint = pkgs.lib.meta.getExe hello;
 
   extraCmd = "echo \"Starting ${container-name}\"; gramine-sgx-sigstruct-view app.sig";
 
