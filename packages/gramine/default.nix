@@ -2,6 +2,7 @@
 , lib
 , nixsgx
 , fetchurl
+, fetchpatch
 , bash
 , meson
 , nasm
@@ -68,6 +69,14 @@ python.pkgs.buildPythonPackage {
     hash = "sha256-QHgRGIx4jnTh0O3ihJbnuPwTdygJ03zpL2bdqAN9+sA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Add locking around read/write on encrypted pipes
+    (fetchpatch {
+      url = "https://github.com/gramineproject/gramine/commit/cd68a460abf9db2295f5dc5cf292b8678741fb22.patch";
+      hash = "sha256-KRgcFiZWCOz1x8O0cgL7aZ1xG9bdZDPwRKSgqOWJ2nQ=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
