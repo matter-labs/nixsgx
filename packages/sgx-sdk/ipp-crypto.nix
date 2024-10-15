@@ -8,13 +8,13 @@
 }:
 gcc11Stdenv.mkDerivation rec {
   pname = "ipp-crypto";
-  version = "2021.11.1";
+  version = "2021.12.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipp-crypto";
     rev = "ippcp_${version}";
-    hash = "sha256-OgNrrPE8jFVD/hcv7A43Bno96r4Z/lb7/SE6TEL7RDI=";
+    hash = "sha256-voxjx9Np/8jy9XS6EvUK4aW18/DGQGaPpTKm9RzuCU8=";
   };
 
   cmakeFlags = [

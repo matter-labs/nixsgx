@@ -121,17 +121,6 @@ index 4e53085..7047a49 100755
 -tar -zcvf ${TARBALL_NAME} *
 +tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
  popd &> /dev/null
-diff --git a/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh b/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
-index fa3286e..cacf5a3 100755
---- a/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
-+++ b/QuoteGeneration/installer/linux/common/sgx-dcap-pccs/createTarball.sh
-@@ -57,5 +57,5 @@ python ${SCRIPT_DIR}/gen_source.py --bom=../licenses/BOM_license.txt --cleanup=f
-
- # Create the tarball
- pushd ${INSTALL_PATH} &> /dev/null
--tar -zcvf ${TARBALL_NAME} *
-+tar -zcv --sort=name --owner=root:0 --group=root:0 --mtime='UTC 2019-01-01 00:00:00' -f ${TARBALL_NAME} *
- popd &> /dev/null
 diff --git a/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh b/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh
 index 6797401..0f59abf 100755
 --- a/QuoteGeneration/installer/linux/common/tdx-qgs/createTarball.sh

@@ -27,15 +27,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.24.100.3";
+  version = "2.25.100.3";
   # Version as used in the Git tag
-  versionTag = "2.24";
+  versionTag = "2.25";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-1urEdfMKNUqqyJ3wQ10+tvtlRuAKELpaCWIOzjCbYKw=";
+    hash = "sha256-RR+vFTd9ZM6XUn3KgQeUM+xoj1Ava4zQzFYA/nfXyaw=";
     fetchSubmodules = true;
   };
 
@@ -139,12 +139,14 @@ stdenv.mkDerivation rec {
       cp ${ipp-crypto-no_mitigation}/include/fips_cert.h inc/ippcp/
 
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp21u11.patch -o ./inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp21u12.patch -o ./inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
       popd
     '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=missing-include-dirs";
 
   buildFlags = [
     "sdk_install_pkg"
