@@ -11,7 +11,7 @@
 let
   inherit (nixsgx) sgx-sdk;
   sgxVersion = sgx-sdk.versionTag;
-  opensslVersion = "3.0.13";
+  opensslVersion = "3.0.14";
 in
 stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
@@ -20,15 +20,15 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-sgx-ssl";
-    rev = "3.0_Rev2";
-    hash = "sha256-dmLyaG6v+skjSa0KxLAfIfSBOxp9grrI7ds6WdGPe0I=";
+    rev = "3.0_Rev4";
+    hash = "sha256-RNAMmm2UNbIziBqu4RioPDb1/3TBd+MCsJ8PeCHWhL0=";
   };
 
   postUnpack =
     let
       opensslSourceArchive = fetchurl {
         url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-        hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
+        hash = "sha256-7soDXU3U6E/CWEbZUtpil0hK+gZQpvhMaC453zpBI8o=";
       };
     in
     ''

@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sgx-dcap";
-  version = "1.21";
+  version = "1.22";
 
   postUnpack =
     let
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
+          hash = "sha256-RTpJQ6epoAN8YQXSJUjJQ5mPaQIiQpStTWFsnspjjDQ=";
         };
       };
     in
@@ -33,13 +33,14 @@ stdenv.mkDerivation rec {
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in dcap source" >&2 && grep 'ae_file_name' "$sourceRoot/QuoteGeneration/download_prebuilt.sh"  && exit 1)
 
       tar -zxf ${dcap.prebuilt} -C $sourceRoot/QuoteGeneration/
+      tar -zxf ${dcap.prebuilt} -C $sourceRoot/
     '';
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "SGXDataCenterAttestationPrimitives";
     rev = "DCAP_${version}";
-    hash = "sha256-Vp8R4W6qdPTGJFNJrPPKe9Oqxxj+UIdZf2GSL+gCyjU=";
+    hash = "sha256-Ubjm3/tpfkRrKhub10g2oDl+2vv/MF4wnJR/nLz7KDk=";
     fetchSubmodules = true;
   };
 
@@ -75,11 +76,11 @@ stdenv.mkDerivation rec {
     patchShebangs --build $(find . -name '*.sh')
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(SGX_SDK="${nixsgx.sgx-sdk}" SGXSSL_PACKAGE_PATH="${nixsgx.sgx-ssl}")
-  '';
+  makeFlags = [
+    "SGX_SDK=${nixsgx.sgx-sdk}"
+    "SGXSSL_PACKAGE_PATH=${nixsgx.sgx-ssl}"
+  ];
 
-  # sigh... Intel!
   enableParallelBuilding = true;
   dontUseCmakeConfigure = true;
 
@@ -112,7 +113,6 @@ stdenv.mkDerivation rec {
         ./tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-network
         ./tools/SGXPlatformRegistration/package/installer/common/libsgx-ra-uefi
         ./tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool
-        #./QuoteGeneration/installer/linux/common/sgx-dcap-pccs
     )
 
     for src in ''${dcap_pkgdirs[@]}; do
@@ -152,10 +152,6 @@ stdenv.mkDerivation rec {
         "$ra_uefi"
         tools/PCKRetrievalTool/installer/common/sgx-pck-id-retrieval-tool/output
         "$pck_id_retrieval_tool"
-        #QuoteGeneration/installer/linux/common/sgx-dcap-pccs/output
-        #"$pccs"
-        #    sgx-ra-service
-        #    tdx-qgs
     )
 
     for ((i = 0 ; i < ''${#dcap_map[@]} ; i+=2 )); do

@@ -27,16 +27,16 @@ stdenv.mkDerivation rec {
       # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-IGV9VEwY/cQBV4Vz2sps4JgRweWRl/l08ocb9P4SH8Q=";
+        hash = "sha256-Hlh96rYOyml2y50d8ASKz6U97Fl0hbGYECeZiG9nMSQ=";
       };
       # Also include the Data Center Attestation Primitives (DCAP) platform
       # enclaves.
       dcap = rec {
-        version = "1.21";
+        version = "1.22";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
+          hash = "sha256-RTpJQ6epoAN8YQXSJUjJQ5mPaQIiQpStTWFsnspjjDQ=";
         };
       };
     in
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
       tar -zxf ${ae.prebuilt}   -C $sourceRoot/
       tar -zxf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/QuoteGeneration/
+      tar -zxf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/
     '';
 
   nativeBuildInputs = [
