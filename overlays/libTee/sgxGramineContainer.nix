@@ -22,6 +22,7 @@
 , sigFile ? null
 , extendedPackages ? [ ]
 , customRecursiveMerge ? null
+, maxLayers ? 100
 }:
 assert lib.assertMsg (!(isAzure && sgx_default_qcnl_conf != null)) "sgx_default_qcnl_conf can't be set for Azure";
 let
@@ -201,6 +202,7 @@ let
         inherit tag;
         inherit contents;
         inherit fromImage;
+        inherit maxLayers;
 
         includeStorePaths = false;
         extraCommands = (mkNixStore contents) + ''
@@ -231,6 +233,7 @@ let
           inherit config;
           inherit tag;
           inherit fromImage;
+          inherit maxLayers;
 
           includeStorePaths = false;
           extraCommands = ''
@@ -247,6 +250,7 @@ let
         inherit tag;
         inherit config;
         inherit fromImage;
+        inherit maxLayers;
         contents = extendedContents;
       };
 in
