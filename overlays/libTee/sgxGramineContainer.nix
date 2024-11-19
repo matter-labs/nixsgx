@@ -56,7 +56,7 @@ let
     };
     loader = {
       argv = [ entrypoint ];
-      entrypoint = "file:{{ gramine.libos }}";
+      entrypoint.uri = "file:{{ gramine.libos }}";
       env = {
         AZDCAP_COLLATERAL_VERSION = "v4";
         AZDCAP_DEBUG_LOG_LEVEL = "ignore";
@@ -211,7 +211,9 @@ let
             CHROOT=$(pwd)
             appDir="${appDir}"
             cd "''${appDir#/}"
-            HOME="''${appDir#/}" ${nixsgx.gramine}/bin/gramine-manifest ${manifestFile} ${appName}.manifest;
+            HOME="${appDir}" ${nixsgx.gramine}/bin/gramine-manifest \
+                --chroot "$CHROOT" \
+                ${manifestFile} ${appName}.manifest;
             ${nixsgx.gramine}/bin/gramine-sgx-sign \
               --chroot "$CHROOT" \
               --manifest ${appName}.manifest \
