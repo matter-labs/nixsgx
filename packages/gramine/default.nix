@@ -15,6 +15,7 @@
 , gawk
 , bison
 , patchelf
+, protobufc
 , which
 }:
 let
@@ -96,7 +97,7 @@ python.pkgs.buildPythonPackage {
     cmake
     pkg-config
     nixsgx.sgx-sdk
-    nixsgx.protobufc
+    protobufc
     nixsgx.sgx-dcap.dev
     nixsgx.sgx-dcap.quote_verify
     autoconf
@@ -108,8 +109,8 @@ python.pkgs.buildPythonPackage {
   ];
 
   buildInputs = [
-    nixsgx.protobufc.dev
-    nixsgx.protobufc.lib
+    protobufc.dev
+    protobufc.lib
     bash
   ];
 
