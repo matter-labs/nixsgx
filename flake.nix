@@ -5,10 +5,10 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
     snowfall-lib = {
-      url = "github:snowfallorg/lib";
+      url = "github:snowfallorg/lib?ref=c6238c83de101729c5de3a29586ba166a9a65622";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

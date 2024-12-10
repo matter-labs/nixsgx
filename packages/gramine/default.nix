@@ -15,7 +15,9 @@
 , gawk
 , bison
 , patchelf
+, protobufc
 , which
+, python3Packages
 }:
 let
   python = pkgs.python3;
@@ -96,7 +98,7 @@ python.pkgs.buildPythonPackage {
     cmake
     pkg-config
     nixsgx.sgx-sdk
-    nixsgx.protobufc
+    protobufc
     nixsgx.sgx-dcap.dev
     nixsgx.sgx-dcap.quote_verify
     autoconf
@@ -107,9 +109,15 @@ python.pkgs.buildPythonPackage {
     perl
   ];
 
+
+  build-system = with python3Packages; [
+    setuptools
+    distutils
+  ];
+
   buildInputs = [
-    nixsgx.protobufc.dev
-    nixsgx.protobufc.lib
+    protobufc.dev
+    protobufc.lib
     bash
   ];
 
