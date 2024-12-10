@@ -17,6 +17,7 @@
 , patchelf
 , protobufc
 , which
+, python3Packages
 }:
 let
   python = pkgs.python3;
@@ -106,6 +107,12 @@ python.pkgs.buildPythonPackage {
     patchelf
     which
     perl
+  ];
+
+
+  build-system = with python3Packages; [
+    setuptools
+    distutils
   ];
 
   buildInputs = [
